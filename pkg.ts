@@ -1,7 +1,7 @@
-import * as electronPackager from "electron-packager";
+import electronPackager from "electron-packager";
 import ora from "ora";
 import { platform } from "os";
-import * as prompts from "prompts";
+import prompts from "prompts";
 
 (async () => {
   let response = {
@@ -83,7 +83,7 @@ import * as prompts from "prompts";
     process.exit();
   }
 
-  let icon: string = "./installer_assets/appIcon.png";
+  let icon = "./installer_assets/appIcon.png";
 
   if (
     response.os == "darwin" ||
@@ -95,7 +95,7 @@ import * as prompts from "prompts";
 
   const spinner = ora("Packaging app").start(),
     packagingOptions: electronPackager.Options = {
-      dir: "./dist/app",
+      dir: "./dist",
       out: "./dist",
       darwinDarkModeSupport: true,
       icon,
@@ -106,9 +106,7 @@ import * as prompts from "prompts";
       appCopyright: `Timeraa 2018-${new Date().getFullYear()}`,
       prune: true,
       asar: true,
-      // @ts-ignore
       arch: response.arch,
-      // @ts-ignore
       platform: response.os,
     };
 

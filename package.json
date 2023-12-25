@@ -8,8 +8,8 @@
     "init": "tsc && tsc pkg util/prepare util/zip",
     "start": "electron dist/index.js --unhandled-rejections=strict",
     "dev": "tsc -w",
-    "build": "rm -rf dist && tsc && cp -r src/assets dist/",
-    "pkg": "node pkg",
+    "build": "rm -rf dist && tsc && cp -r src/assets dist/ && cp package.json dist/ && cd dist/ && bun i",
+    "pkg": "echo 'Run `bun run ./pkg` or `npm i tsx --saveDev && tsx pkg .`'",
     "deploy": "tsc .github/deploy && cd .github && node deploy.js"
   },
   "license": "MPL-2.0",
@@ -33,6 +33,7 @@
     "ora": "8.0.1",
     "prettier": "^3.1.1",
     "prompts": "2.4.2",
+    "tsx": "^4.7.0",
     "typescript": "5.3.3",
     "unzipper": "0.10.14"
   },
