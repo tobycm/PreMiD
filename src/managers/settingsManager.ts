@@ -9,9 +9,9 @@ import { trayManager } from "..";
 
 //* Export and set default settings
 export let settings = new ElectronStore({
-	defaults: {
-		autoLaunch: true
-	}
+  defaults: {
+    autoLaunch: true,
+  },
 });
 
 /**
@@ -19,15 +19,15 @@ export let settings = new ElectronStore({
  * @param extensionSettings Settings from extension
  */
 export function update(extensionSettings: ExtensionSettings) {
-	//* Show debug
-	//* remove title if disabled
-	//* Update autolaunch if updated
-	//* Save Settings
-	info("Updated settings");
-	if (!extensionSettings.titleMenubar && platform() === "darwin")
-		trayManager.tray.setTitle("");
-	if (settings.get("autoLaunch") != extensionSettings.autoLaunch) {
-		settings.set("autoLaunch", extensionSettings.autoLaunch);
-		updateAutoLaunch();
-	}
+  //* Show debug
+  //* remove title if disabled
+  //* Update autolaunch if updated
+  //* Save Settings
+  info("Updated settings");
+  if (!extensionSettings.titleMenubar && platform() === "darwin")
+    trayManager.tray.setTitle("");
+  if (settings.get("autoLaunch") != extensionSettings.autoLaunch) {
+    settings.set("autoLaunch", extensionSettings.autoLaunch);
+    updateAutoLaunch();
+  }
 }

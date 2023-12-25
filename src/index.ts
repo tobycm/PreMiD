@@ -23,12 +23,12 @@ if (!singleInstanceLock) app.quit();
 
 app.setAppUserModelId("Timeraa.PreMiD");
 app.whenReady().then(async () => {
-	trayManager = new TrayManager();
+  trayManager = new TrayManager();
 
-	await Promise.all([checkForUpdate(true), initAutoLaunch(), initSocket()]);
+  await Promise.all([checkForUpdate(true), initAutoLaunch(), initSocket()]);
 
-	app.isPackaged
-		? (updateCheckerInterval = setInterval(checkForUpdate, 15 * 1000 * 60))
-		: undefined;
-	if (platform() === "darwin") app.dock.hide();
+  app.isPackaged
+    ? (updateCheckerInterval = setInterval(checkForUpdate, 15 * 1000 * 60))
+    : undefined;
+  if (platform() === "darwin") app.dock.hide();
 });
