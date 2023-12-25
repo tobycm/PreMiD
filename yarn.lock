@@ -67,10 +67,10 @@
   dependencies:
     "@types/glob" "*"
 
-"@types/auto-launch@5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@types/auto-launch/-/auto-launch-5.0.1.tgz#388a047edc0e754d8e8978cbd9ed4672b36be2c4"
-  integrity sha512-+KQ+/koZ7sJXnf5cnCANofY6yXAdYJNEoVZEuWcwJfuWbUp9u6l09I7KhwD+ivU+cdz7JId4V5ukxscWtHdSuw==
+"@types/auto-launch@5.0.5":
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/@types/auto-launch/-/auto-launch-5.0.5.tgz#439ed36aaaea501e2e2cfbddd8a20c366c34863b"
+  integrity sha512-/nGvQZSzM/pvCMCh4Gt2kIeiUmOP/cKGJbjlInI+A+5MoV/7XmT56DJ6EU8bqc3+ItxEe4UC2GVspmPzcCc8cg==
 
 "@types/caseless@*":
   version "0.12.2"
@@ -400,10 +400,10 @@ author-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/author-regex/-/author-regex-1.0.0.tgz#d08885be6b9bbf9439fe087c76287245f0a81450"
   integrity sha1-0IiFvmubv5Q5/gh8dihyRfCoFFA=
 
-auto-launch@5.0.5:
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/auto-launch/-/auto-launch-5.0.5.tgz#d14bd002b1ef642f85e991a6195ff5300c8ad3c0"
-  integrity sha512-ppdF4mihhYzMYLuCcx9H/c5TUOCev8uM7en53zWVQhyYAJrurd2bFZx3qQVeJKF2jrc7rsPRNN5cD+i23l6PdA==
+auto-launch@5.0.6:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/auto-launch/-/auto-launch-5.0.6.tgz#ccc238ddc07b2fa84e96a1bc2fd11b581a20cb2d"
+  integrity sha512-OgxiAm4q9EBf9EeXdPBiVNENaWE3jUZofwrhAkWjHDYGezu1k3FRZHU8V2FBxGuSJOHzKmTJEd0G7L7/0xDGFA==
   dependencies:
     applescript "^1.0.0"
     mkdirp "^0.5.1"
