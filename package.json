@@ -48,7 +48,7 @@
 		"discord-rpc": "github:discordjs/RPC",
 		"electron-store": "7.0.3",
 		"socket.io": "3.1.2",
-		"source-map-support": "^0.5.19"
+		"source-map-support": "^0.5.21"
 	},
 	"devScript": {
 		"out": "dist/app"
