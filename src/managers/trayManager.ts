@@ -6,13 +6,13 @@ import { trayManager } from "../";
 import { checkForUpdate, update, updateAvailable } from "../util/updateChecker";
 import { connected } from "./socketManager";
 
-let trayIcon = join(import.meta.dir, "../assets/tray/Icon@4x.png");
+let trayIcon = join(__dirname, "../assets/tray/Icon@4x.png");
 
 switch (platform()) {
   case "darwin":
-    trayIcon = join(import.meta.dir, "../assets/tray/IconTemplate.png");
+    trayIcon = join(__dirname, "../assets/tray/IconTemplate.png");
   case "win32":
-    trayIcon = join(import.meta.dir, "../assets/tray/Icon.ico");
+    trayIcon = join(__dirname, "../assets/tray/Icon.ico");
 }
 
 export class TrayManager {
@@ -30,7 +30,7 @@ export class TrayManager {
       Menu.buildFromTemplate([
         {
           icon: join(
-            import.meta.dir,
+            __dirname,
             platform() === "darwin"
               ? "../assets/tray/IconTemplate.png"
               : "../assets/tray/Icon@4x.png",
