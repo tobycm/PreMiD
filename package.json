@@ -36,7 +36,8 @@
     "ts-devscript": "^3.0.7",
     "typescript": "5.3.3",
     "unzipper": "0.10.14",
-    "yarn": "1.22.21"
+    "yarn": "1.22.21",
+    "bun-types": "latest"
   },
   "dependencies": {
     "auto-launch": "5.0.6",
@@ -49,5 +50,7 @@
   },
   "devScript": {
     "out": "dist/app"
-  }
+  },
+  "module": "index.ts",
+  "type": "module"
 }

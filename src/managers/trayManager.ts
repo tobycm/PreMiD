@@ -6,18 +6,13 @@ import { trayManager } from "../";
 import { checkForUpdate, update, updateAvailable } from "../util/updateChecker";
 import { connected } from "./socketManager";
 
-let trayIcon;
+let trayIcon = join(import.meta.dir, "../assets/tray/Icon@4x.png");
 
 switch (platform()) {
   case "darwin":
-    trayIcon = join(__dirname, "../assets/tray/IconTemplate.png");
-    break;
+    trayIcon = join(import.meta.dir, "../assets/tray/IconTemplate.png");
   case "win32":
-    trayIcon = join(__dirname, "../assets/tray/Icon.ico");
-    break;
-  default:
-    trayIcon = join(__dirname, "../assets/tray/Icon@4x.png");
-    break;
+    trayIcon = join(import.meta.dir, "../assets/tray/Icon.ico");
 }
 
 export class TrayManager {
@@ -34,10 +29,12 @@ export class TrayManager {
     this.tray.setContextMenu(
       Menu.buildFromTemplate([
         {
-          icon:
+          icon: join(
+            import.meta.dir,
             platform() === "darwin"
-              ? join(__dirname, "../assets/tray/IconTemplate.png")
-              : join(__dirname, "../assets/tray/Icon@4x.png"),
+              ? "../assets/tray/IconTemplate.png"
+              : "../assets/tray/Icon@4x.png",
+          ),
           label: `${app.name} v${app.getVersion()}`,
           enabled: false,
         },
@@ -46,16 +43,12 @@ export class TrayManager {
           label: `Extension - ${connected ? "Connected" : "Not connected"}`,
           enabled: false,
         },
-        {
-          type: "separator",
-        },
+        { type: "separator" },
         {
           label: "Presence Store",
           click: () => shell.openExternal("https://premid.app/store"),
         },
-        {
-          type: "separator",
-        },
+        { type: "separator" },
         {
           label: `Update ${app.name}!`,
           visible: updateAvailable,
@@ -70,16 +63,11 @@ export class TrayManager {
           label: "Contributors",
           click: () => shell.openExternal("https://premid.app/contributors"),
         },
-        {
-          type: "separator",
-        },
-        {
-          label: `Quit ${app.name}`,
-          role: "quit",
-        },
+        { type: "separator" },
+        { label: `Quit ${app.name}`, role: "quit" },
       ]),
     );
   }
 }
 
-app.once("quit", () => trayManager?.tray.destroy());
+app.once("quit", () => trayManager.tray.destroy());

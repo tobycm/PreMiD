@@ -1,53 +1,49 @@
-import { readdirSync, readFileSync, unwatchFile } from "fs";
-import { dialog, app } from "electron";
-import { socket } from "./socketManager";
+import { app, dialog } from "electron";
+import { readdirSync, readFileSync } from "fs";
 import { extname } from "path";
 import { info } from "../util/debug";
+import { socket } from "./socketManager";
 
 import chokidar from "chokidar";
 
-let presenceDevWatchedFiles = [],
-  currWatchPath = "",
-  currWatcher: chokidar.FSWatcher = null;
+let currentWatchPath = "",
+  currentWatcher: chokidar.FSWatcher | null = null;
 
 export async function watchDir(path: string) {
-  currWatchPath = path + "/";
+  currentWatchPath = path + "/";
   let files = readdirSync(path);
 
-  if (currWatcher) await currWatcher.close();
+  if (currentWatcher) await currentWatcher.close();
 
-  currWatcher = chokidar.watch(currWatchPath, {
+  currentWatcher = chokidar.watch(currentWatchPath, {
     ignoreInitial: true,
     ignored: ["*.ts"],
   });
 
-  currWatcher.on("all", (eventName) => {
-    files = readdirSync(currWatchPath);
+  currentWatcher.on("all", (eventName) => {
+    files = readdirSync(currentWatchPath);
 
-    console.log(eventName, currWatchPath, files);
+    console.log(eventName, currentWatchPath, files);
 
-    readFiles(files, currWatchPath);
+    readFiles(files, currentWatchPath);
   });
 
   readFiles(files, path);
 }
 
-async function readFiles(files, path) {
+async function readFiles(files: string[], path: string) {
   //* Send files to extension
   socket.emit("localPresence", {
     files: await Promise.all(
-      files.map((f) => {
-        if (extname(f) === ".json")
+      files.map((file) => {
+        if (extname(file) === ".json")
           return {
-            file: f,
-            contents: JSON.parse(readFileSync(`${path}/${f}`).toString()),
+            file,
+            contents: JSON.parse(readFileSync(`${path}/${file}`).toString()),
           };
-        else if (extname(f) === ".js")
-          return {
-            file: f,
-            contents: readFileSync(`${path}/${f}`).toString(),
-          };
-        else return;
+        if (extname(file) === ".js")
+          return { file, contents: readFileSync(`${path}/${file}`).toString() };
+        return null;
       }),
     ),
   });
@@ -59,7 +55,7 @@ export async function openFileDialog() {
   //* Unwatch all still watched files
   //* Watch directory
   app.focus();
-  let oDialog = await dialog.showOpenDialog(null, {
+  let oDialog = await dialog.showOpenDialog({
     title: "Select Presence Folder",
     message:
       "Please select the folder that contains the presence you want to load.\n(metadata.json, presence.js, iframe.js)",
@@ -73,10 +69,6 @@ export async function openFileDialog() {
     return;
   }
   info(`Watching ${oDialog.filePaths[0]}`);
-  if (presenceDevWatchedFiles.length > 0)
-    await Promise.all(
-      presenceDevWatchedFiles.map((f) => unwatchFile(currWatchPath + f)),
-    );
 
   watchDir(oDialog.filePaths[0]);
 }

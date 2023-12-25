@@ -10,7 +10,7 @@ export let rpcClients: Array<RPCClient> = [];
 
 class RPCClient {
   clientId: string;
-  currentPresence: PresenceData;
+  currentPresence: PresenceData | null = null;
   client: Client;
   clientReady: boolean = false;
 
@@ -40,8 +40,8 @@ class RPCClient {
     info(`Create RPC client (${this.clientId})`);
   }
 
-  setActivity(presenceData?: PresenceData) {
-    presenceData = presenceData ? presenceData : this.currentPresence;
+  setActivity(presenceData: PresenceData | null = null) {
+    presenceData = presenceData ?? this.currentPresence;
 
     if (!this.clientReady || !presenceData) return;
 
@@ -86,38 +86,32 @@ class RPCClient {
 export function setActivity(presence: PresenceData) {
   let client = rpcClients.find((c) => c.clientId === presence.clientId);
 
-  if (!client) {
-    client = new RPCClient(presence.clientId);
-    client.currentPresence = presence;
-  } else client.setActivity(presence);
+  if (client) return client.setActivity(presence);
+
+  client = new RPCClient(presence.clientId);
+  client.currentPresence = presence;
 }
 
 /**
  * Clear a user's activity
  * @param clientId clientId of presence to clear
  */
-export function clearActivity(clientId: string = undefined) {
+export function clearActivity(clientId: string = "") {
   info("clearActivity");
 
-  if (clientId) {
-    let client = rpcClients.find((c) => c.clientId === clientId);
-    client.clearActivity();
-  } else rpcClients.forEach((c) => c.clearActivity());
+  if (!clientId) return rpcClients.forEach((c) => c.clearActivity());
+
+  rpcClients.find((c) => c.clientId === clientId)?.clearActivity();
 }
 
 export async function getDiscordUser() {
-  return new Promise((resolve, reject) => {
-    const c = new Client({ transport: "ipc" });
+  const client = new Client({ transport: "ipc" });
 
-    c.login({
-      clientId: "503557087041683458",
-    })
-      .then(({ user }) => c.destroy().then(() => resolve(user)))
-      .catch(reject);
-  });
+  const { user } = await client.login({ clientId: "503557087041683458" });
+
+  await client.destroy();
+
+  return user;
 }
 
-app.once(
-  "will-quit",
-  async () => await Promise.all(rpcClients.map((c) => c.destroy())),
-);
+app.once("will-quit", () => Promise.all(rpcClients.map((c) => c.destroy())));

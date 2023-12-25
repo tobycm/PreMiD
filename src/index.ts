@@ -13,7 +13,7 @@ export let trayManager: TrayManager;
 //* Define and set it to null
 //* Set AppUserModelId for task manager etc
 //* When app is ready
-export let updateCheckerInterval = null;
+export let updateCheckerInterval: NodeJS.Timeout | null = null;
 
 //* Attempt to get lock to prevent multiple instances of PreMiD from running
 let singleInstanceLock = app.requestSingleInstanceLock();

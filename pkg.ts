@@ -1,7 +1,7 @@
 import * as electronPackager from "electron-packager";
 import ora from "ora";
 import { platform } from "os";
-import prompts from "prompts";
+import * as prompts from "prompts";
 
 (async () => {
   let response = {

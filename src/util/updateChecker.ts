@@ -1,12 +1,11 @@
-import { exec } from "child_process";
-import { resolve } from "path";
-import { error, info } from "./debug";
-import { app, dialog, shell } from "electron";
-import { platform } from "os";
 import axios from "axios";
-import { Notification } from "electron";
-import { trayManager } from "..";
+import { exec } from "child_process";
+import { Notification, app, dialog, shell } from "electron";
 import { createWriteStream, existsSync, unlinkSync } from "fs";
+import { platform } from "os";
+import { resolve } from "path";
+import { trayManager } from "..";
+import { info } from "./debug";
 
 export let updateAvailable = false;
 let initialNotification = true;
@@ -20,44 +19,34 @@ export async function checkForUpdate(autoUpdate = false, manual = false) {
     return;
   }
 
-  axios
-    .get("https://api.premid.app/v2/versions")
-    .then(({ data }) => {
-      if (!data?.app) return;
+  const { data } = await axios.get("https://api.premid.app/v2/versions");
+  if (!data?.app) return;
 
-      const latestAppVersion = data.app;
-
-      if (app.getVersion() >= latestAppVersion) {
-        if (manual)
-          dialog.showMessageBox(null, {
-            message: "There are currently no updates available.",
-            type: "info",
-          });
-        return;
-      }
-
-      if (autoUpdate) {
-        updateTray();
-        update();
-        return;
-      }
-
-      if (initialNotification) {
-        const updateNotification = new Notification({
-          title: "Update available!",
-          body: "A new version of PreMiD is available! Click here to update.",
-        });
-
-        updateNotification.once("click", update);
-        updateNotification.show();
-        updateTray();
-
-        initialNotification = false;
-      }
-    })
-    .catch((err) => {
-      error(err.message);
+  const latestAppVersion = data.app;
+  if (app.getVersion() >= latestAppVersion && manual)
+    return dialog.showMessageBox({
+      message: "There are currently no updates available.",
+      type: "info",
     });
+
+  if (autoUpdate) {
+    updateTray();
+    update();
+    return;
+  }
+
+  if (initialNotification) {
+    const updateNotification = new Notification({
+      title: "Update available!",
+      body: "A new version of PreMiD is available! Click here to update.",
+    });
+
+    updateNotification.once("click", update);
+    updateNotification.show();
+    updateTray();
+
+    initialNotification = false;
+  }
 }
 
 export async function update() {
@@ -84,12 +73,15 @@ export async function update() {
   const writer = createWriteStream(updaterPath);
   response.data.pipe(writer);
 
-  new Promise((resolve, reject) => {
-    writer.on("finish", resolve);
-    writer.on("error", reject);
-  })
-    .then(() => exec(updaterPath, errorHandler))
-    .catch(errorHandler);
+  try {
+    await new Promise((resolve, reject) => {
+      writer.on("finish", resolve);
+      writer.on("error", reject);
+    });
+  } catch (e) {
+    return errorHandler(e as Error);
+  }
+  exec(updaterPath, (e) => errorHandler(e as Error));
 }
 
 function errorHandler(err: Error) {

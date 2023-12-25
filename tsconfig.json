@@ -1,15 +1,24 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2018",
-    "moduleResolution": "node",
-    "inlineSourceMap": true,
-    "outDir": "dist/app",
-    "removeComments": true,
-    "esModuleInterop": true,
+    "lib": ["ESNext"],
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "composite": true,
+    "strict": true,
+    "downlevelIteration": true,
     "skipLibCheck": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "types": [
+      "bun-types" // add Bun global
+    ]
   },
   "include": ["src/**/*"],
   "exclude": [

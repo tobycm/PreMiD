@@ -1,10 +1,10 @@
 import AutoLaunch from "auto-launch";
 import { app } from "electron";
-import { settings } from "./settingsManager";
 import { info } from "../util/debug";
+import { settings } from "./settingsManager";
 
 //* Create autoLaunch object
-let autoLaunch = new AutoLaunch({
+const autoLaunch = new AutoLaunch({
   name: app.name,
   isHidden: true,
 });
@@ -21,9 +21,6 @@ export async function update() {
     info("Skipping autoLaunch.");
     return;
   }
-  if (settings.get("autoLaunch", true))
-    //* Enable if not enabled
-    autoLaunch.enable();
-  //* Disable if enabled
+  if (settings.get("autoLaunch", true)) autoLaunch.enable();
   else autoLaunch.disable();
 }
