@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "auto-launch": "5.0.6",
-    "axios": "1.6.2",
+    "axios": "1.6.4",
     "chokidar": "3.5.3",
     "discord-rpc": "github:discordjs/RPC",
     "electron-store": "8.1.0",
